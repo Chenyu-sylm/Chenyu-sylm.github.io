@@ -8,7 +8,10 @@
   <link href="https://chenyu-sylm.github.io/" rel="alternate"/>
   <link href="https://chenyu-sylm.github.io/atom.xml" rel="self"/>
   <rights>All rights reserved 2026, Chenyu</rights>
-  <title>Hexo</title>
+  <subtitle>
+    <![CDATA[技术博客&随心记录]]>
+  </subtitle>
+  <title>Chenyu's blog</title>
   <updated>2026-09-24T12:19:41.828Z</updated>
   <entry>
     <author>
