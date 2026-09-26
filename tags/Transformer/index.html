@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chenyu-sylm.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"chenyu-sylm.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta property="og:type" content="website">
@@ -149,6 +149,122 @@
     text-overflow: ellipsis;
   }
   .recent-posts-widget .recent-posts-list li:last-child { border-bottom: none; }
+
+  /* ===== 首页文章卡片化 =====
+     只作用于首页 .content.index；文章页/归档页保持原布局。
+     布局：标题（左）→ 摘要+阅读全文 → 底部小字（日期·分类）+ 标签 */
+  .content.index .post-block {
+    background: #f6f6f6;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    padding: 18px 22px 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .25s ease, border-color .25s ease, transform .25s ease;
+  }
+  .content.index .post-block:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+    border-color: #c9d1d9;
+    transform: translateY(-2px);
+  }
+  .content.index .post-block:last-child { margin-bottom: 0; }
+
+  /* 把标题（顶部）和 meta（底部）拆开：header 不占盒子，
+     标题/正文/日期分类/标签直接参与卡片的纵向弹性排列 */
+  .content.index .post-header { display: contents; }
+  .content.index .post-title { order: 1; text-align: left; margin-bottom: 6px; font-size: 18px; font-weight: 700; }
+  .content.index .post-body { order: 2; font-size: 14px; }
+  .content.index .post-meta { order: 3; }
+  .content.index .post-footer { order: 4; }
+
+  /* 底部小字：日期、分类（去掉图标和"发表于/分类于"文字，只留值和分隔线） */
+  .content.index .post-meta {
+    text-align: left;
+    font-size: 13px;
+    margin: 12px 0 0;
+  }
+  .content.index .post-meta .post-meta-item-icon,
+  .content.index .post-meta .post-meta-item-text { display: none; }
+  /* 底部只留「日历+日期」「箱子+分类」两个带图标的值，"发表于/分类于"文字去掉 */
+  .content.index .post-meta .post-meta-item:first-child .post-meta-item-icon,
+  .content.index .post-meta .post-meta-item:has(.fa-folder) .post-meta-item-icon {
+    display: inline-block;
+    margin-right: 3px;
+  }
+  .content.index .post-meta > .post-meta-item > .post-meta-item-icon { font-size: 12px; }
+  /* 卡片只保留一个日期：隐藏主题的"编辑于"项（fa-calendar-check），只留发表日期 */
+  .content.index .post-meta .post-meta-item:has(.fa-calendar-check) { display: none; }
+  /* 分类图标：把文件夹替换成 fa-box（箱子），实心字形 */
+  .content.index .post-meta .fa-folder {
+    display: inline-block;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+  }
+  .content.index .post-meta .fa-folder::before { content: "\f468"; }
+
+  /* 阅读全文做成小号文字链接，不再占居中大按钮（摘要与按钮间距收紧） */
+  .content.index .post-body > p { margin-bottom: 0; }
+  .content.index .post-button { margin-top: 6px; text-align: left; }
+  .content.index .post-button .btn {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #0969da;
+    font-size: 13px;
+  }
+  .content.index .post-button .btn:hover { background: transparent; color: #0550ae; }
+
+  /* 隐藏原来分隔文章的省略号横线；卡片底部的标签行 */
+  .content.index .post-eof { display: none; }
+  .content.index .post-footer .post-tags {
+    margin: 8px 0 0;
+    text-align: left; /* 覆盖主题 .posts-expand .post-tags 的居中 */
+    font-size: 13px;
+  }
+  /* 标签不框起来：纯文字、靠左排列 */
+  .content.index .post-footer .post-tags a {
+    margin: 0 14px 0 0;
+    color: #57606a;
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+  .content.index .post-footer .post-tags a:hover { color: #0969da; }
+  /* 标签图标小一号，跟文字保持同基线 */
+  .content.index .post-footer .post-tags a i {
+    font-size: 11px;
+    margin-right: 3px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    /* 用户要求卡片统一米白浅色，深色模式下也保持浅卡 + 卡片内深色文字才能看清 */
+    .content.index .post-block {
+      background: #f6f6f6;
+      border-color: #dcdcdc;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
+    }
+    .content.index .post-block:hover {
+      border-color: #cfcfcf;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+    }
+    .content.index .post-title-link { color: #1f2328; }
+    .content.index .post-body { color: #373d44; }
+    .content.index .post-meta { color: #57606a; }
+    .content.index .post-button .btn { color: #0969da; }
+    .content.index .post-button .btn:hover { color: #0550ae; }
+    .content.index .post-footer .post-tags a { color: #57606a; }
+    .content.index .post-footer .post-tags a:hover { color: #0969da; }
+  }
+
+  /* ===== 文章页：标签显示在标题/日期下方另起一行（不再放文末）
+     对应 themes/next/layout/_macro/post.swig 中的本地改动（标签移入 post-header） */
+  .content.post .post-header .post-meta { margin-bottom: 18px; }
+  .content.post .post-header .post-tags {
+    margin: 0 0 26px;
+    text-align: center;
+  }
+  .content.post .post-header .post-tags a { margin: 0 10px; }
 
   /* ===== 移动端（<992px）目录入口 =====
      Pisces 在 <992px 把 .sidebar 和 .sidebar-toggle 无条件 display:none
@@ -325,7 +441,6 @@
     <span>0%</span>
   </div>
   <div class="reading-progress-bar"></div>
-  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
 
   <a href="https://github.com/Chenyu-sylm" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
@@ -545,8 +660,6 @@
 
 
 <script src="/js/next-boot.js"></script>
-
-<script src="/js/bookmark.js"></script>
 
 
 
