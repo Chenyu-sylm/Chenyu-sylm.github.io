@@ -20,23 +20,30 @@
     var CONFIG = {"hostname":"chenyu-sylm.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Chenyu&#39;s blog">
-<meta property="og:url" content="https://chenyu-sylm.github.io/index.html">
+  <meta name="description" content="PyTorch 张量变换与重塑在 LLM 中，张量形状变换是极其重要的技能。无论是多头注意力的分头操作、位置编码的维度扩展，还是 MoE 的专家路由，都需要熟练掌握这些操作。 涉及的操作   操作 用途 项目应用    view() 张量重塑 多头注意力分头   reshape() 张量重塑（可复制内存） GQA中KV扩展   transpose() 维度交换 注意力计算QK^T   contig">
+<meta property="og:type" content="article">
+<meta property="og:title" content="张量操作">
+<meta property="og:url" content="https://chenyu-sylm.github.io/2026/09/26/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/index.html">
 <meta property="og:site_name" content="Chenyu&#39;s blog">
+<meta property="og:description" content="PyTorch 张量变换与重塑在 LLM 中，张量形状变换是极其重要的技能。无论是多头注意力的分头操作、位置编码的维度扩展，还是 MoE 的专家路由，都需要熟练掌握这些操作。 涉及的操作   操作 用途 项目应用    view() 张量重塑 多头注意力分头   reshape() 张量重塑（可复制内存） GQA中KV扩展   transpose() 维度交换 注意力计算QK^T   contig">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-26T03:55:46.000Z">
+<meta property="article:modified_time" content="2026-09-26T04:14:40.765Z">
 <meta property="article:author" content="Chenyu">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Transformer">
+<meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://chenyu-sylm.github.io/">
+<link rel="canonical" href="https://chenyu-sylm.github.io/2026/09/26/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
@@ -193,7 +200,7 @@
   }
 </style>
 
-  <title>Chenyu's blog</title>
+  <title>张量操作 | Chenyu's blog</title>
   
 
 
@@ -335,9 +342,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -353,10 +361,9 @@
       <meta itemprop="name" content="Chenyu's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/09/26/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">张量操作</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          张量操作
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -389,7 +396,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="PyTorch-张量变换与重塑"><a href="#PyTorch-张量变换与重塑" class="headerlink" title="PyTorch 张量变换与重塑"></a>PyTorch 张量变换与重塑</h1><p>在 LLM 中，张量形状变换是极其重要的技能。无论是多头注意力的分头操作、位置编码的维度扩展，还是 MoE 的专家路由，都需要熟练掌握这些操作。</p>
+        <h1 id="PyTorch-张量变换与重塑"><a href="#PyTorch-张量变换与重塑" class="headerlink" title="PyTorch 张量变换与重塑"></a>PyTorch 张量变换与重塑</h1><p>在 LLM 中，张量形状变换是极其重要的技能。无论是多头注意力的分头操作、位置编码的维度扩展，还是 MoE 的专家路由，都需要熟练掌握这些操作。</p>
 <h2 id="涉及的操作"><a href="#涉及的操作" class="headerlink" title="涉及的操作"></a>涉及的操作</h2><table>
 <thead>
 <tr>
@@ -770,325 +777,45 @@ where(mask): row=[0, 0, 1], col=[0, 2, 1]
 <li>使用 <code>-1</code> 让 PyTorch 自动推断维度大小</li>
 </ol>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/Transformer/" rel="tag"># Transformer</a>
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+          </div>
+
+        
+
+
+        
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenyu-sylm.github.io/2026/09/26/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E6%89%8B%E6%92%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Chenyu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chenyu's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/09/26/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E6%89%8B%E6%92%95/" class="post-title-link" itemprop="url">注意力机制手撕</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2026-09-26 10:59:59 / 修改时间：13:33:56" itemprop="dateCreated datePublished" datetime="2026-09-26T10:59:59+08:00">2026-09-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">大模型算法</span></a>
-                </span>
-                  
-                  <span class="category-separator">›</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%AE%97%E6%B3%95/Transformer%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">Transformer核心组件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="注意力机制"><a href="#注意力机制" class="headerlink" title="注意力机制"></a>注意力机制</h1><h2 id="Scaled-Dot-Product-Attention"><a href="#Scaled-Dot-Product-Attention" class="headerlink" title="Scaled Dot-Product Attention"></a>Scaled Dot-Product Attention</h2><h3 id="背景与动机"><a href="#背景与动机" class="headerlink" title="背景与动机"></a>背景与动机</h3><p>缩放点积注意力（Scaled Dot-Product Attention）是所有注意力机制的基础。它计算 Query 和 Key 的点积，除以缩放因子后通过 softmax 得到注意力权重，最后加权求和 Value。</p>
-<p>这是理解多头注意力的前提，也是面试中最常考的基础版本。</p>
-<h3 id="核心公式"><a href="#核心公式" class="headerlink" title="核心公式"></a>核心公式</h3><p>$$\text{Attention}(Q, K, V) &#x3D; \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$</p>
-<p><strong>为什么需要缩放？</strong></p>
-<ul>
-<li>当 $d_k$ 较大时，点积结果也会很大</li>
-<li>过大的值进入 softmax 后会导致<strong>梯度消失</strong></li>
-<li>除以 $\sqrt{d_k}$ 使<strong>方差稳定</strong>在 1 附近</li>
-</ul>
-<h3 id="张量形状流程图"><a href="#张量形状流程图" class="headerlink" title="张量形状流程图"></a>张量形状流程图</h3><div class="mermaid" data-graph="flowchart TD&#10;    Q[&quot;Q: [batch, num_heads, seq_len, head_dim]&quot;] --&gt; Scores[&quot;scores = Q @ K^T / sqrt(head_dim)&quot;]&#10;    K[&quot;K: [batch, num_heads, seq_len, head_dim]&quot;] --&gt; Scores&#10;    Scores --&gt; ScoresShape[&quot;[batch, num_heads, seq_len, seq_len]&quot;]&#10;    ScoresShape --&gt; Softmax[&quot;attn_weights = softmax(scores, dim=-1)&quot;]&#10;    Softmax --&gt; WeightsShape[&quot;[batch, num_heads, seq_len, seq_len]&quot;]&#10;    WeightsShape --&gt; WeightedSum[&quot;output = attn_weights @ V&quot;]&#10;    V[&quot;V: [batch, num_heads, seq_len, head_dim]&quot;] --&gt; WeightedSum&#10;    WeightedSum --&gt; Output[&quot;输出: [batch, num_heads, seq_len, head_dim]&quot;]">
-flowchart TD
-    Q["Q: [batch, num_heads, seq_len, head_dim]"] --&gt; Scores["scores = Q @ K^T / sqrt(head_dim)"]
-    K["K: [batch, num_heads, seq_len, head_dim]"] --&gt; Scores
-    Scores --&gt; ScoresShape["[batch, num_heads, seq_len, seq_len]"]
-    ScoresShape --&gt; Softmax["attn_weights = softmax(scores, dim=-1)"]
-    Softmax --&gt; WeightsShape["[batch, num_heads, seq_len, seq_len]"]
-    WeightsShape --&gt; WeightedSum["output = attn_weights @ V"]
-    V["V: [batch, num_heads, seq_len, head_dim]"] --&gt; WeightedSum
-    WeightedSum --&gt; Output["输出: [batch, num_heads, seq_len, head_dim]"]
-</div>
-
-<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">因果（掩码）单头注意力机制</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MaskedSelfAttention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_dim, output_dim, dropout, context_length</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># Q K V 矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.W_q = torch.nn.Linear(input_dim, output_dim)</span><br><span class="line">        <span class="variable language_">self</span>.W_k = torch.nn.Linear(input_dim, output_dim)</span><br><span class="line">        <span class="variable language_">self</span>.W_v = torch.nn.Linear(input_dim, output_dim)</span><br><span class="line">        <span class="comment"># Dropout</span></span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout)</span><br><span class="line">        <span class="comment"># 掩码矩阵, 缓冲区和大模型一起移动到同一个设备</span></span><br><span class="line">        <span class="variable language_">self</span>.register_buffer(<span class="string">&quot;mask&quot;</span>, torch.triu(torch.ones(context_length, context_length), diagonal=<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># 解码维度</span></span><br><span class="line">        batch_num, token_num, input_dim = <span class="built_in">input</span>.shape</span><br><span class="line">        query = <span class="variable language_">self</span>.W_q(<span class="built_in">input</span>)</span><br><span class="line">        keys = <span class="variable language_">self</span>.W_k(<span class="built_in">input</span>)</span><br><span class="line">        values = <span class="variable language_">self</span>.W_v(<span class="built_in">input</span>)</span><br><span class="line">        <span class="comment"># 计算 注意力分数</span></span><br><span class="line">        attn_scores = query @ keys.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="comment"># 掩码</span></span><br><span class="line">        attn_scores.masked_fill_( </span><br><span class="line">            <span class="comment"># 动态裁剪掩码矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.mask.<span class="built_in">bool</span>()[:token_num, :token_num], -torch.inf)</span><br><span class="line">        <span class="comment"># 计算 注意力权重【归一化】 </span></span><br><span class="line">        attn_weights = torch.softmax( </span><br><span class="line">            attn_scores / keys.shape[-<span class="number">1</span>]**<span class="number">0.5</span>, dim=-<span class="number">1</span> </span><br><span class="line">        ) </span><br><span class="line">        <span class="comment"># 应用 Dropout减少过拟合</span></span><br><span class="line">        attn_weights = <span class="variable language_">self</span>.dropout(attn_weights) </span><br><span class="line">        result = attn_weights @ values</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="多头注意力-MHA"><a href="#多头注意力-MHA" class="headerlink" title="多头注意力 MHA"></a>多头注意力 MHA</h2><h3 id="背景与动机-1"><a href="#背景与动机-1" class="headerlink" title="背景与动机"></a>背景与动机</h3><p>多头注意力（Multi-Head Attention, MHA）通过将输入映射到多个子空间<strong>并行计算</strong>注意力，模型可以同时关注不同位置的<strong>不同表示子空间信息</strong>。</p>
-<p><strong>每个头学习不同的注意力模式，最后拼接并通过输出投影融合</strong>。</p>
-<h3 id="核心公式-1"><a href="#核心公式-1" class="headerlink" title="核心公式"></a>核心公式</h3><p>$$\text{MultiHead}(Q, K, V) &#x3D; \text{Concat}(\text{head}_1, ..., \text{head}_h)W^O$$</p>
-<p>其中 $\text{head}_i &#x3D; \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$</p>
-<h3 id="自注意力、交叉注意力"><a href="#自注意力、交叉注意力" class="headerlink" title="自注意力、交叉注意力"></a>自注意力、交叉注意力</h3><ul>
-<li>自注意力是指 Q、K、V 都来自同一个输入序列。模型会让序列中的每个位置去关注<strong>同一个序列中的所有位置</strong>，从而学习序列内部的位置关系和依赖关系。</li>
-<li>交叉注意力是指 Q 来自一个输入序列，而 K 和 V 来自另一个输入序列。它的作用是<strong>让一个序列去查询、关注另一个序列中的信息</strong>。<ul>
-<li>交叉注意力计算出来的权重表示序列 A 的每个位置，应该从序列 B 的哪些位置获取信息，以及获取多少。</li>
-<li>例如在机器翻译过程中，解码器生成目标语言时，需要看编码器编码好的源语言句子；或者图像描述生成时，模型生成文字描述时，需要看图像特征。</li>
-</ul>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>对比项</th>
-<th>自注意力</th>
-<th>交叉注意力</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Q 来源</td>
-<td><code>x_query</code></td>
-<td><code>x_query</code></td>
-</tr>
-<tr>
-<td>K 来源</td>
-<td><code>x_query</code></td>
-<td><code>x_context</code></td>
-</tr>
-<tr>
-<td>V 来源</td>
-<td><code>x_query</code></td>
-<td><code>x_context</code></td>
-</tr>
-<tr>
-<td>输入数量</td>
-<td>1 个输入序列</td>
-<td>2 个输入序列</td>
-</tr>
-<tr>
-<td>主要作用</td>
-<td>学习序列内部关系</td>
-<td>让一个序列关注另一个序列</td>
-</tr>
-<tr>
-<td>典型位置</td>
-<td>编码器、解码器自注意力层</td>
-<td>解码器与编码器交互层</td>
-</tr>
-</tbody></table>
-<h3 id="Mask"><a href="#Mask" class="headerlink" title="Mask"></a>Mask</h3><p>常见的 mask 有两类：<strong>因果 mask</strong>和 <strong>padding mask</strong>。</p>
-<h4 id="因果mask"><a href="#因果mask" class="headerlink" title="因果mask"></a>因果mask</h4><p>因果 mask 用于防止当前位置看到未来位置，它通常是一个上三角矩阵，例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[[0, 1, 1, 1],</span><br><span class="line"> [0, 0, 1, 1],</span><br><span class="line"> [0, 0, 0, 1],</span><br><span class="line"> [0, 0, 0, 0]]</span><br></pre></td></tr></table></figure>
-<ul>
-<li>1：表示未来位置，需要被遮住</li>
-<li>0：表示当前位置或过去位置，可以被看到</li>
-</ul>
-<h4 id="padding-mask"><a href="#padding-mask" class="headerlink" title="padding mask"></a>padding mask</h4><p>在<strong>序列长度不一致</strong>时，Padding mask 用于屏蔽填充位置，避免模型关注无意义的 <pad> 位置。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">例如对于：</span><br><span class="line">序列1: [A, B, C, &lt;pad&gt;, &lt;pad&gt;]</span><br><span class="line">序列2: [X, Y, Z, W, E]</span><br><span class="line"></span><br><span class="line">对应的padding mask可以为：</span><br><span class="line">[[1, 1, 1, 0, 0],</span><br><span class="line"> [1, 1, 1, 1, 1]]</span><br></pre></td></tr></table></figure>
-
-<h4 id="组合mask"><a href="#组合mask" class="headerlink" title="组合mask"></a>组合mask</h4><p>实际应用中经常同时使用因果 mask 和 padding mask</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 合并 mask：两个条件都要满足</span></span><br><span class="line"><span class="comment"># 既不能看未来位置，也不能看 pad 位置</span></span><br><span class="line">combined_mask = causal_mask * padding_mask</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="张量形状流程图-1"><a href="#张量形状流程图-1" class="headerlink" title="张量形状流程图"></a>张量形状流程图</h3><div class="mermaid" data-graph="flowchart TD&#10;    X[&quot;输入 x: [batch, seq_len, model_dim]&quot;]&#10;    X --&gt; WQ[&quot;W_q&quot;]&#10;    X --&gt; WK[&quot;W_k&quot;]&#10;    X --&gt; WV[&quot;W_v&quot;]&#10;    WQ --&gt; Q0[&quot;Q&lt;br/&gt;[batch, seq_len, model_dim]&quot;]&#10;    WK --&gt; K0[&quot;K&lt;br/&gt;[batch, seq_len, model_dim]&quot;]&#10;    WV --&gt; V0[&quot;V&lt;br/&gt;[batch, seq_len, model_dim]&quot;]&#10;    Q0 --&gt; RQ[&quot;reshape&quot;] --&gt; Q[&quot;Q&lt;br/&gt;[batch, num_heads, seq_len, head_dim]&quot;]&#10;    K0 --&gt; RK[&quot;reshape&quot;] --&gt; K[&quot;K&lt;br/&gt;[batch, num_heads, seq_len, head_dim]&quot;]&#10;    V0 --&gt; RV[&quot;reshape&quot;] --&gt; V[&quot;V&lt;br/&gt;[batch, num_heads, seq_len, head_dim]&quot;]&#10;    Q --&gt; Attention[&quot;Scaled Dot-Product Attention&quot;]&#10;    K --&gt; Attention&#10;    V --&gt; Attention&#10;    Attention --&gt; Context[&quot;[batch, num_heads, seq_len, head_dim]&quot;]&#10;    Context --&gt; Concat[&quot;reshape (concat heads)&quot;]&#10;    Concat --&gt; ConcatShape[&quot;[batch, seq_len, model_dim]&quot;]&#10;    ConcatShape --&gt; WO[&quot;W_o (output projection)&quot;]&#10;    WO --&gt; Output[&quot;输出: [batch, seq_len, model_dim]&quot;]">
-flowchart TD
-    X["输入 x: [batch, seq_len, model_dim]"]
-    X --&gt; WQ["W_q"]
-    X --&gt; WK["W_k"]
-    X --&gt; WV["W_v"]
-    WQ --&gt; Q0["Q&lt;br/&gt;[batch, seq_len, model_dim]"]
-    WK --&gt; K0["K&lt;br/&gt;[batch, seq_len, model_dim]"]
-    WV --&gt; V0["V&lt;br/&gt;[batch, seq_len, model_dim]"]
-    Q0 --&gt; RQ["reshape"] --&gt; Q["Q&lt;br/&gt;[batch, num_heads, seq_len, head_dim]"]
-    K0 --&gt; RK["reshape"] --&gt; K["K&lt;br/&gt;[batch, num_heads, seq_len, head_dim]"]
-    V0 --&gt; RV["reshape"] --&gt; V["V&lt;br/&gt;[batch, num_heads, seq_len, head_dim]"]
-    Q --&gt; Attention["Scaled Dot-Product Attention"]
-    K --&gt; Attention
-    V --&gt; Attention
-    Attention --&gt; Context["[batch, num_heads, seq_len, head_dim]"]
-    Context --&gt; Concat["reshape (concat heads)"]
-    Concat --&gt; ConcatShape["[batch, seq_len, model_dim]"]
-    ConcatShape --&gt; WO["W_o (output projection)"]
-    WO --&gt; Output["输出: [batch, seq_len, model_dim]"]
-</div>
-
-
-<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">多头注意力机制</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">1. 自注意力：x_context 为 None 时，Q、K、V 都来自 x_query</span></span><br><span class="line"><span class="string">2. 交叉注意力：x_context 不为 None 时，Q 来自 x_query，K、V 来自 x_context</span></span><br><span class="line"><span class="string">3. 可选因果 mask：防止当前位置看到未来位置</span></span><br><span class="line"><span class="string">4. 可选外部 mask：用于 padding mask 或自定义 mask</span></span><br><span class="line"><span class="string">5. 输出投影：最后通过 fc_out 做融合投影</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MultiHeadAttention</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    多头注意力模块</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        input_dim: 输入维度</span></span><br><span class="line"><span class="string">        output_dim: 输出维度，也作为 Q/K/V 的总维度</span></span><br><span class="line"><span class="string">        num_heads: 注意力头数</span></span><br><span class="line"><span class="string">        dropout: attention weights 的 dropout 概率</span></span><br><span class="line"><span class="string">        context_length: 最大序列长度，用于构造内置因果 mask</span></span><br><span class="line"><span class="string">                        如果不需要内置因果 mask，可以设为 None</span></span><br><span class="line"><span class="string">        use_causal_mask: 是否使用内置因果 mask</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        input_dim,</span></span><br><span class="line"><span class="params">        output_dim,</span></span><br><span class="line"><span class="params">        num_heads,</span></span><br><span class="line"><span class="params">        dropout=<span class="number">0.0</span>,</span></span><br><span class="line"><span class="params">        context_length=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        use_causal_mask=<span class="literal">False</span></span></span><br><span class="line"><span class="params">    </span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">assert</span> model_dim % num_heads == <span class="number">0</span>, <span class="string">&quot;model_dim must be divisible by num_heads&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.input_dim = input_dim</span><br><span class="line">        <span class="variable language_">self</span>.output_dim = output_dim</span><br><span class="line">        <span class="variable language_">self</span>.num_heads = num_heads</span><br><span class="line">        <span class="variable language_">self</span>.head_dim = output_dim // num_heads</span><br><span class="line">        <span class="variable language_">self</span>.use_causal_mask = use_causal_mask</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Q, K, V 投影层</span></span><br><span class="line">        <span class="variable language_">self</span>.W_q = nn.Linear(input_dim, output_dim)</span><br><span class="line">        <span class="variable language_">self</span>.W_k = nn.Linear(input_dim, output_dim)</span><br><span class="line">        <span class="variable language_">self</span>.W_v = nn.Linear(input_dim, output_dim)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 输出投影层</span></span><br><span class="line">        <span class="variable language_">self</span>.fc_out = nn.Linear(output_dim, output_dim)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 内置因果 mask</span></span><br><span class="line">        <span class="variable language_">self</span>.register_buffer(</span><br><span class="line">            <span class="string">&quot;causal_mask&quot;</span>,</span><br><span class="line">            <span class="variable language_">self</span>._build_causal_mask(context_length) <span class="keyword">if</span> context_length <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_build_causal_mask</span>(<span class="params">self, context_length</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        构造因果 mask</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        返回一个上三角矩阵：</span></span><br><span class="line"><span class="string">        1 表示未来位置，需要被遮住</span></span><br><span class="line"><span class="string">        0 表示当前位置或过去位置，可以被看到</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        mask = torch.triu(</span><br><span class="line">            torch.ones(context_length, context_length),</span><br><span class="line">            diagonal=<span class="number">1</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> mask</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x_query, x_context=<span class="literal">None</span>, mask=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        前向传播</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            x_query: 查询输入</span></span><br><span class="line"><span class="string">                     shape: [batch_size, seq_len_q, input_dim]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            x_context: 上下文输入，用于生成 K 和 V [交叉注意力]</span></span><br><span class="line"><span class="string">                       shape: [batch_size, seq_len_k, input_dim]</span></span><br><span class="line"><span class="string">                       如果为 None，则使用 x_query，表示自注意力</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            mask: 外部注意力掩码</span></span><br><span class="line"><span class="string">                  可以是：</span></span><br><span class="line"><span class="string">                  - [seq_len_q, seq_len_k]</span></span><br><span class="line"><span class="string">                  - [1, 1, seq_len_q, seq_len_k]</span></span><br><span class="line"><span class="string">                  - [batch_size, 1, seq_len_q, seq_len_k]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                  mask 中值为 1 的位置会被遮住</span></span><br><span class="line"><span class="string">                  mask 中值为 0 的位置会被保留</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            output: [batch_size, seq_len_q, output_dim]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        batch_size, seq_len_q, _ = x_query.shape</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果 x_context 为 None，则做自注意力</span></span><br><span class="line">        <span class="keyword">if</span> x_context <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            x_context = x_query</span><br><span class="line"></span><br><span class="line">        seq_len_k = x_context.size(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 1. 线性投影生成 Q, K, V ==========</span></span><br><span class="line">        query = <span class="variable language_">self</span>.W_q(x_query)       <span class="comment"># [batch_size, seq_len_q, output_dim]</span></span><br><span class="line">        keys = <span class="variable language_">self</span>.W_k(x_context)      <span class="comment"># [batch_size, seq_len_k, output_dim]</span></span><br><span class="line">        values = <span class="variable language_">self</span>.W_v(x_context)    <span class="comment"># [batch_size, seq_len_k, output_dim]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 2. 拆分成多头 ==========</span></span><br><span class="line">        <span class="comment"># [batch_size, seq_len, output_dim]</span></span><br><span class="line">        <span class="comment"># -&gt; [batch_size, seq_len, num_heads, head_dim]</span></span><br><span class="line">        <span class="comment"># -&gt; [batch_size, num_heads, seq_len, head_dim]</span></span><br><span class="line"></span><br><span class="line">        query = query.view(batch_size, seq_len_q, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        keys = keys.view(batch_size, seq_len_k, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        values = values.view(batch_size, seq_len_k, <span class="variable language_">self</span>.num_heads, <span class="variable language_">self</span>.head_dim).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 3. 计算注意力分数 ==========</span></span><br><span class="line">        <span class="comment"># query: [batch_size, num_heads, seq_len_q, head_dim]</span></span><br><span class="line">        <span class="comment"># keys:  [batch_size, num_heads, seq_len_k, head_dim]</span></span><br><span class="line">        <span class="comment"># keys.transpose(-2, -1): [batch_size, num_heads, head_dim, seq_len_k]</span></span><br><span class="line"></span><br><span class="line">        attn_scores = torch.matmul(query, keys.transpose(-<span class="number">2</span>, -<span class="number">1</span>)) / math.sqrt(<span class="variable language_">self</span>.head_dim)</span><br><span class="line">        <span class="comment"># attn_scores: [batch_size, num_heads, seq_len_q, seq_len_k]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 4. 应用 mask ==========</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 4.1 内置因果 mask</span></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.use_causal_mask <span class="keyword">and</span> <span class="variable language_">self</span>.causal_mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            causal_mask = <span class="variable language_">self</span>.causal_mask[:seq_len_q, :seq_len_k]</span><br><span class="line">            attn_scores = attn_scores.masked_fill(causal_mask == <span class="number">1</span>, <span class="built_in">float</span>(<span class="string">&quot;-inf&quot;</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 4.2 外部 mask</span></span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            attn_scores = attn_scores.masked_fill(mask == <span class="number">1</span>, <span class="built_in">float</span>(<span class="string">&quot;-inf&quot;</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 5. 计算注意力权重 ==========</span></span><br><span class="line">        attn_weights = F.softmax(attn_scores, dim=-<span class="number">1</span>)</span><br><span class="line">        attn_weights = <span class="variable language_">self</span>.dropout(attn_weights)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 6. 加权求和得到上下文向量 ==========</span></span><br><span class="line">        <span class="comment"># attn_weights: [batch_size, num_heads, seq_len_q, seq_len_k]</span></span><br><span class="line">        <span class="comment"># values:       [batch_size, num_heads, seq_len_k, head_dim]</span></span><br><span class="line"></span><br><span class="line">        context_vecs = torch.matmul(attn_weights, values)</span><br><span class="line">        <span class="comment"># context_vecs: [batch_size, num_heads, seq_len_q, head_dim]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 7. 合并多头 ==========</span></span><br><span class="line">        <span class="comment"># [batch_size, num_heads, seq_len_q, head_dim]</span></span><br><span class="line">        <span class="comment"># -&gt; [batch_size, seq_len_q, num_heads, head_dim]</span></span><br><span class="line">        <span class="comment"># -&gt; [batch_size, seq_len_q, output_dim]</span></span><br><span class="line"></span><br><span class="line">        context_vecs = context_vecs.transpose(<span class="number">1</span>, <span class="number">2</span>).contiguous()</span><br><span class="line">        context_vecs = context_vecs.view(batch_size, seq_len_q, <span class="variable language_">self</span>.output_dim)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ========== 8. 输出投影 ==========</span></span><br><span class="line">        output = <span class="variable language_">self</span>.fc_out(context_vecs)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://chenyu-sylm.github.io/2026/09/25/%E6%95%B0%E7%BB%84%E7%AE%97%E6%B3%95-%E4%B8%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Chenyu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chenyu's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/09/25/%E6%95%B0%E7%BB%84%E7%AE%97%E6%B3%95-%E4%B8%80/" class="post-title-link" itemprop="url">数组算法(一)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2026-09-25 22:18:10 / 修改时间：23:25:48" itemprop="dateCreated datePublished" datetime="2026-09-25T22:18:10+08:00">2026-09-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数组基本知识"><a href="#数组基本知识" class="headerlink" title="数组基本知识"></a>数组基本知识</h1><ul>
-<li><p>数组是存放在连续内存空间上的<strong>相同类型</strong>数据的集合。</p>
-</li>
-<li><p>数组下标都是从0开始的。</p>
-</li>
-<li><p><strong>一维&#x2F;二维数组内存空间的地址是连续的</strong>【在python中是这样】。</p>
-<ul>
-<li>因为数组内存空间地址是连续的，所以当我们对数组中的元素进行增加&#x2F;删除的时候，就会对数组中的其他元素造成影响。<br>  <strong>所以一般不删除数组中元素，而是改用覆盖</strong>。</li>
-</ul>
-  <img src="/2026/09/25/%E6%95%B0%E7%BB%84%E7%AE%97%E6%B3%95-%E4%B8%80/image.png" class="" title="元素删除操作"></li>
-</ul>
-<h1 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h1><p>题目链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-search/">https://leetcode.cn/problems/binary-search/</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: nums = [-1,0,3,5,9,12], target = 9     </span><br><span class="line">输出: 4       </span><br><span class="line">解释: 9 出现在 nums 中并且下标为 4    </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>条件：<strong>数组有序且没有重复元素</strong>。</li>
-<li>原理：即找到中间元素mid，通过每次更新mid并将mid和target进行比较，使得每次都把搜索区间减少一半。</li>
-<li><strong>重点：要确定好循环不变量，在这里为区间定义【如左闭右开、左闭右闭等】，在while寻找中每一次边界的处理都要坚持根据区间的定义来操作</strong>。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, nums, target</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type target: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 定义左右端点</span></span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        right = <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">        <span class="comment"># 区间定义为左闭右闭</span></span><br><span class="line">        <span class="keyword">while</span> left &lt;= right:</span><br><span class="line">            mid = left + (right - left) // <span class="number">2</span> </span><br><span class="line">            <span class="keyword">if</span> nums[mid] &gt; target:</span><br><span class="line">                right = mid - <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> nums[mid] &lt; target:</span><br><span class="line">                left = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> mid</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>    </span><br></pre></td></tr></table></figure>
-
-<h1 id="双指针"><a href="#双指针" class="headerlink" title="双指针"></a>双指针</h1><h2 id="移除元素"><a href="#移除元素" class="headerlink" title="移除元素"></a>移除元素</h2><p>给一个数组 nums 和一个值 val，需要<strong>原地</strong>移除所有数值等于val 的元素，并返回移除后数组的新长度。</p>
-<p>题目链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-element/">https://leetcode.cn/problems/remove-element/</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">示例 1: 给定 nums = [3,2,2,3], val = 3, 函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。 你不需要考虑数组中超出新长度后面的元素。</span><br><span class="line"></span><br><span class="line">示例 2: 给定 nums = [0,1,2,2,3,0,4,2], val = 2, 函数应该返回新的长度 5, 并且 nums 中的前五个元素为 0, 1, 3, 0, 4。</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>双指针即<strong>通过一个快指针和慢指针在一个for循环下完成两个for循环的工作。</strong></li>
-<li>快指针：寻找新数组的元素 ，新数组就是不含有目标元素的数组。</li>
-<li>慢指针：指向更新新数组下标的位置。</li>
-<li><strong>指针的快和慢就是通过它们所指向的元素符合我们想要的情况的时候导致的。因为慢指针指向的内容为新数组中的元素，所以不包括符合剔除条件的元素，比如这里有2个元素等于val的时候，慢指针最后就会落后快指针两个单位。</strong></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">removeElement</span>(<span class="params">self, nums, val</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :type val: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义快指针和慢指针</span></span><br><span class="line">        fast , slow = <span class="number">0</span> , <span class="number">0</span></span><br><span class="line">        size = <span class="built_in">len</span>(nums) - <span class="number">1</span> <span class="comment"># 边界条件</span></span><br><span class="line">        <span class="keyword">while</span> fast &lt;= size:</span><br><span class="line">            <span class="keyword">if</span> nums[fast] != val:</span><br><span class="line">                <span class="comment"># 两个指针同时移动</span></span><br><span class="line">                slow += <span class="number">1</span></span><br><span class="line">            fast += <span class="number">1</span> <span class="comment"># 若出现相同则slow不移动</span></span><br><span class="line">        <span class="keyword">return</span> slow <span class="comment"># 最后slow即表示新数组的长度</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="有序数组平方"><a href="#有序数组平方" class="headerlink" title="有序数组平方"></a>有序数组平方</h2><p>给一个按<strong>非递减顺序</strong>排序的整数数组 nums，返回每个数字的平方组成的新数组，要求也按<strong>非递减顺序</strong>排序。</p>
-<p>题目链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/squares-of-a-sorted-array/">https://leetcode.cn/problems/squares-of-a-sorted-array/</a></p>
-<ul>
-<li>这里主要是因为负数的平方可能会比正数的平方更大，所以<strong>涉及到这种两数动态比较的题目，可以尝试用双指针</strong>。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">示例 1：</span><br><span class="line">输入：nums = [-4,-1,0,3,10]</span><br><span class="line">输出：[0,1,9,16,100]</span><br><span class="line">解释：平方后，数组变为 [16,1,0,9,100]，排序后，数组变为 [0,1,9,16,100]</span><br><span class="line"></span><br><span class="line">示例 2：</span><br><span class="line">输入：nums = [-7,-3,2,3,11]</span><br><span class="line">输出：[4,9,9,49,121]</span><br></pre></td></tr></table></figure>
-<ul>
-<li>暴力解法即：直接每个元素平方之后用<code>sort</code>进行排序</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sortedSquares</span>(<span class="params">self, nums</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        right = <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">        res = [<span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>)] * <span class="built_in">len</span>(nums) <span class="comment"># 结果列表</span></span><br><span class="line">        i = <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> left &lt;= right:</span><br><span class="line">            <span class="keyword">if</span> nums[left] ** <span class="number">2</span> &gt;= nums[right] ** <span class="number">2</span>: <span class="comment"># 左边平方更大</span></span><br><span class="line">                res[i] = nums[left]**<span class="number">2</span></span><br><span class="line">                left += <span class="number">1</span> <span class="comment"># 左边移动以获取下一个（可能更小）值</span></span><br><span class="line">            <span class="keyword">elif</span> nums[left] ** <span class="number">2</span> &lt; nums[right] ** <span class="number">2</span>: <span class="comment"># 右边平方更大</span></span><br><span class="line">                res[i] = nums[right]**<span class="number">2</span> </span><br><span class="line">                right -= <span class="number">1</span> <span class="comment"># 右边移动以获取下一个（更小）值</span></span><br><span class="line">            i -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-
-<h1 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h1><h2 id="长度最小的子数组"><a href="#长度最小的子数组" class="headerlink" title="长度最小的子数组"></a>长度最小的子数组</h2><p>题目链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-size-subarray-sum/">https://leetcode.cn/problems/minimum-size-subarray-sum/</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的 连续 子数组，并返回其长度。如果不存在符合条件的子数组，返回 0。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line">输入：s = 7, nums = [2,3,1,2,4,3]</span><br><span class="line">输出：2</span><br><span class="line">解释：子数组 [4,3] 是该条件下的长度最小的子数组。</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
 
           </div>
           
+    
+  <div class="comments" id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="Chenyu-sylm/Chenyu-sylm.github.io"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -1135,6 +862,7 @@ flowchart TD
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PyTorch-%E5%BC%A0%E9%87%8F%E5%8F%98%E6%8D%A2%E4%B8%8E%E9%87%8D%E5%A1%91"><span class="nav-number">1.</span> <span class="nav-text">PyTorch 张量变换与重塑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%89%E5%8F%8A%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">涉及的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%EF%BC%9A%E5%BC%A0%E9%87%8F%E8%BF%9E%E7%BB%AD"><span class="nav-number">1.2.</span> <span class="nav-text">前提：张量连续</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shape%E3%80%81stride-%E5%92%8C%E8%BF%9E%E7%BB%AD%E6%80%A7%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">shape、stride 和连续性的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#contiguous-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.2.2.</span> <span class="nav-text">contiguous 的作用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-view-%E5%BC%A0%E9%87%8F%E9%87%8D%E5%A1%91"><span class="nav-number">1.3.</span> <span class="nav-text">1. view() - 张量重塑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9"><span class="nav-number">1.3.2.</span> <span class="nav-text">关键点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-reshape-vs-view"><span class="nav-number">1.4.</span> <span class="nav-text">2. reshape() vs view()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.4.1.</span> <span class="nav-text">最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-transpose-%E4%B8%8E-permute-%E7%BB%B4%E5%BA%A6%E4%BA%A4%E6%8D%A2"><span class="nav-number">1.5.</span> <span class="nav-text">3. transpose() 与 permute() - 维度交换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#transpose-%E4%BA%A4%E6%8D%A2%E4%B8%A4%E4%B8%AA%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.5.1.</span> <span class="nav-text">transpose() - 交换两个维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#permute-%E9%87%8D%E6%8E%92%E6%89%80%E6%9C%89%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.5.2.</span> <span class="nav-text">permute() - 重排所有维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9-1"><span class="nav-number">1.5.3.</span> <span class="nav-text">关键点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-contiguous-%E5%86%85%E5%AD%98%E8%BF%9E%E7%BB%AD%E5%8C%96"><span class="nav-number">1.6.</span> <span class="nav-text">4. contiguous() - 内存连续化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-1"><span class="nav-number">1.6.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%BF%9E%E7%BB%AD%EF%BC%9F"><span class="nav-number">1.6.2.</span> <span class="nav-text">为什么需要连续？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-squeeze-%E4%B8%8E-unsqueeze-%E7%BB%B4%E5%BA%A6%E5%A2%9E%E5%87%8F"><span class="nav-number">1.7.</span> <span class="nav-text">5. squeeze() 与 unsqueeze() - 维度增减</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#squeeze-%E5%88%A0%E9%99%A4%E5%A4%A7%E5%B0%8F%E4%B8%BA-1-%E7%9A%84%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.7.1.</span> <span class="nav-text">squeeze() - 删除大小为 1 的维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unsqueeze-%E5%9C%A8%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE%E6%8F%92%E5%85%A5%E5%A4%A7%E5%B0%8F%E4%B8%BA-1-%E7%9A%84%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.7.2.</span> <span class="nav-text">unsqueeze() - 在指定位置插入大小为 1 的维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%94%A8%E9%80%94"><span class="nav-number">1.7.3.</span> <span class="nav-text">常见用途</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-expand-%E5%B9%BF%E6%92%AD%E5%BC%8F%E6%89%A9%E5%B1%95"><span class="nav-number">1.8.</span> <span class="nav-text">6. expand() - 广播式扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-2"><span class="nav-number">1.8.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9-2"><span class="nav-number">1.8.2.</span> <span class="nav-text">关键点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expand-vs-repeat"><span class="nav-number">1.8.3.</span> <span class="nav-text">expand() vs repeat()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-cat-%E4%B8%8E-stack-%E5%BC%A0%E9%87%8F%E6%8B%BC%E6%8E%A5"><span class="nav-number">1.9.</span> <span class="nav-text">7. cat() 与 stack() - 张量拼接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cat-concatenate-%E5%9C%A8%E5%B7%B2%E6%9C%89%E7%BB%B4%E5%BA%A6%E6%8B%BC%E6%8E%A5"><span class="nav-number">1.9.1.</span> <span class="nav-text">cat() (concatenate) - 在已有维度拼接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stack-%E5%88%9B%E5%BB%BA%E6%96%B0%E7%BB%B4%E5%BA%A6%E5%A0%86%E5%8F%A0"><span class="nav-number">1.9.2.</span> <span class="nav-text">stack() - 创建新维度堆叠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">1.9.3.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-split-%E4%B8%8E-chunk-%E5%BC%A0%E9%87%8F%E5%88%86%E5%89%B2"><span class="nav-number">1.10.</span> <span class="nav-text">8. split() 与 chunk() - 张量分割</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#split-%E6%8C%89%E6%8C%87%E5%AE%9A%E5%A4%A7%E5%B0%8F%E5%88%86%E5%89%B2"><span class="nav-number">1.10.1.</span> <span class="nav-text">split() - 按指定大小分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chunk-%E6%8C%89%E6%8C%87%E5%AE%9A%E4%BB%BD%E6%95%B0%E5%88%86%E5%89%B2"><span class="nav-number">1.10.2.</span> <span class="nav-text">chunk() - 按指定份数分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB-1"><span class="nav-number">1.10.3.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-where-%E6%9D%A1%E4%BB%B6%E9%80%89%E6%8B%A9"><span class="nav-number">1.11.</span> <span class="nav-text">9. where() - 条件选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-3"><span class="nav-number">1.11.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E7%94%A8%E6%B3%95"><span class="nav-number">1.11.2.</span> <span class="nav-text">两种用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.12.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5-1"><span class="nav-number">1.12.1.</span> <span class="nav-text">最佳实践</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

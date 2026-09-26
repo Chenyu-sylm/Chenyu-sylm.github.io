@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chenyu-sylm.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"chenyu-sylm.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta property="og:type" content="website">
@@ -40,6 +40,158 @@
     lang   : 'zh-CN'
   };
 </script>
+<style>
+  /* 代码块增强：复制 + 折叠（超过 12 行的块默认折叠） */
+  .cb-enhanced {
+    position: relative;
+    margin: 1.2em 0;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f6f8fa;
+  }
+  .cb-enhanced > figure.highlight {
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+  .cb-enhanced.cb-collapsed > figure.highlight { display: none; }
+  .cb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: #eef1f4;
+    border-bottom: 1px solid #e1e4e8;
+    user-select: none;
+  }
+  .cb-lang {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 12px;
+    letter-spacing: .5px;
+    color: #6a737d;
+    text-transform: uppercase;
+  }
+  .cb-actions { display: flex; gap: 6px; }
+  .cb-btn {
+    border: 1px solid #d0d7de;
+    background: #fff;
+    color: #24292e;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-size: 12px;
+    line-height: 1.6;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .cb-btn:hover { background: #f0f3f6; }
+  .cb-btn:active { background: #e1e4e8; }
+  .cb-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 12px;
+  }
+  .cb-global { padding: 3px 14px; }
+
+  @media (prefers-color-scheme: dark) {
+    .cb-enhanced { background: #161b22; border-color: #30363d; }
+    .cb-header { background: #21262d; border-color: #30363d; }
+    .cb-lang { color: #8b949e; }
+    .cb-btn { background: #30363d; border-color: #3d444d; color: #c9d1d9; }
+    .cb-btn:hover { background: #3d444d; }
+  }
+
+  /* 文章页分类层级路径分隔符 */
+  .category-separator {
+    margin: 0 4px;
+    color: #b1b7bd;
+  }
+
+  /* 分类页：子分类树缩进（覆盖 NexT 的 padding-left: 10px） */
+  .category-all .category-list-child {
+    list-style: none;
+    margin: 2px 0 0;
+    padding-left: 18px;
+    border-left: 1px dashed #d0d7de;
+  }
+  .category-all .category-list-item { margin: 5px 10px; }
+
+  @media (prefers-color-scheme: dark) {
+    .category-separator { color: #6e7681; }
+    .category-all .category-list-child { border-left-color: #30363d; }
+  }
+
+  /* mermaid 图：渲染成功后居中；CDN 加载失败时降级成可读的等宽源码 */
+  .mermaid { text-align: center; overflow-x: auto; }
+  .mermaid:not([data-processed]) {
+    white-space: pre;
+    text-align: left;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 13px;
+    padding: 10px 12px;
+    border: 1px dashed #d0d7de;
+    border-radius: 6px;
+    background: #f6f8fa;
+  }
+
+  /* 侧边栏：最近文章 */
+  .recent-posts-widget .recent-posts-list {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+  .recent-posts-widget .recent-posts-list li {
+    padding: 4px 0;
+    border-bottom: 1px dotted #e1e4e8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .recent-posts-widget .recent-posts-list li:last-child { border-bottom: none; }
+
+  /* ===== 移动端（<992px）目录入口 =====
+     Pisces 在 <992px 把 .sidebar 和 .sidebar-toggle 无条件 display:none
+     （themes/next/source/css/_schemes/Pisces/_sidebar.styl:8-9 与 :13-14），
+     而滑出逻辑只写在 Muse 方案里（themes/next/source/js/schemes/muse.js），
+     所以主题配置 sidebar.onmobile 对 Pisces 不起作用，这里自己补入口和抽屉。 */
+  @media (max-width: 991px) {
+    .sidebar-toggle { display: block !important; }
+    body.cb-sidebar-open .sidebar {
+      display: block !important;
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 300px;
+      max-width: 86vw;
+      margin-top: 0 !important;
+      padding: 14px 10px 46px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      z-index: 1250;
+      box-shadow: 2px 0 14px rgba(0, 0, 0, .45);
+    }
+    /* Affix 会把 .sidebar-inner 设成 fixed，抽屉里必须回到普通流 */
+    body.cb-sidebar-open .sidebar .sidebar-inner {
+      position: static !important;
+      top: auto !important;
+      width: auto !important;
+      transform: none !important;
+    }
+    /* motion 过渡依赖元素可见性：Pisces 把 .sidebar-inner 设成 opacity:0，
+       而 js/motion.js 的侧栏动画只在桌面路径上触发，抽屉里必须自己点亮的元素 */
+    body.cb-sidebar-open .sidebar .sidebar-inner,
+    body.cb-sidebar-open .sidebar .motion-element { opacity: 1 !important; }
+    body.cb-sidebar-open::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 1200;
+    }
+  }
+</style>
 
   <title>标签: leetcode | Chenyu's blog</title>
   
@@ -295,26 +447,27 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
 
 
+<div class="links-of-blogroll recent-posts-widget motion-element"><div class="links-of-blogroll-title"><i class="fa fa-history fa-fw"></i> 最近文章</div><ul class="recent-posts-list"><li><a href="/2026/09/26/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" title="张量操作" rel="section">张量操作</a></li><li><a href="/2026/09/26/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E6%89%8B%E6%92%95/" title="注意力机制手撕" rel="section">注意力机制手撕</a></li><li><a href="/2026/09/25/%E6%95%B0%E7%BB%84%E7%AE%97%E6%B3%95-%E4%B8%80/" title="数组算法(一)" rel="section">数组算法(一)</a></li></ul></div>
 
       </div>
 
@@ -401,6 +554,352 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+<script>
+  (function () {
+    // 超过该行数的代码块默认折叠，短块直接展开
+    var FOLD_THRESHOLD = 12;
+
+    // Hexo 把每行输出成 inline <span class="line">，innerText 不会在 inline 元素间插入换行，
+    // 直接取 innerText 会把整个多行代码块粘成一行。必须逐行取 textContent。
+    function extractCode(figure) {
+      var codeEl = figure.querySelector('.code') || figure.querySelector('pre') || figure;
+      var lines = codeEl.querySelectorAll('.line');
+      if (lines.length) {
+        var out = [];
+        for (var i = 0; i < lines.length; i++) out.push(lines[i].textContent);
+        return out.join('\n');
+      }
+      return codeEl.innerText;
+    }
+
+    function lineCount(figure) {
+      var codeEl = figure.querySelector('.code') || figure.querySelector('pre');
+      if (!codeEl) return 0;
+      var lines = codeEl.querySelectorAll('.line');
+      return lines.length ? lines.length : codeEl.innerText.split('\n').length;
+    }
+
+    function langLabel(figure) {
+      var lang = '';
+      figure.classList.forEach(function (c) {
+        if (c && c !== 'highlight' && !lang) lang = c;
+      });
+      if (!lang || lang === 'plaintext') return 'text';
+      return lang;
+    }
+
+    function setCollapsed(wrapper, collapsed) {
+      wrapper.classList.toggle('cb-collapsed', collapsed);
+      var btn = wrapper.querySelector('.cb-fold');
+      if (btn) btn.textContent = collapsed ? '展开' : '折叠';
+    }
+
+    function allWrappers() {
+      return Array.prototype.slice.call(document.querySelectorAll('.post-body .cb-enhanced'));
+    }
+
+    function syncGlobalBtn() {
+      var btn = document.querySelector('.cb-global');
+      if (!btn) return;
+      var anyExpanded = allWrappers().some(function (w) { return !w.classList.contains('cb-collapsed'); });
+      btn.textContent = anyExpanded ? '全部折叠' : '全部展开';
+    }
+
+    function addGlobalToggle(body) {
+      if (!body.querySelector('.cb-toolbar')) {
+        var toolbar = document.createElement('div');
+        toolbar.className = 'cb-toolbar';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cb-btn cb-global';
+        btn.addEventListener('click', function () {
+          var collapse = btn.textContent === '全部折叠';
+          allWrappers().forEach(function (w) { setCollapsed(w, collapse); });
+          syncGlobalBtn();
+        });
+        toolbar.appendChild(btn);
+        body.insertBefore(toolbar, body.firstChild);
+      }
+      syncGlobalBtn();
+    }
+
+    function enhance() {
+      var body = document.querySelector('.post-body');
+      if (!body) return;
+
+      body.querySelectorAll('figure.highlight').forEach(function (figure) {
+        if (figure.parentNode.classList.contains('cb-enhanced')) return;
+
+        var wrapper = document.createElement('div');
+        wrapper.className = 'cb-enhanced';
+        figure.parentNode.insertBefore(wrapper, figure);
+
+        var header = document.createElement('div');
+        header.className = 'cb-header';
+
+        var langSpan = document.createElement('span');
+        langSpan.className = 'cb-lang';
+        langSpan.textContent = langLabel(figure);
+
+        var actions = document.createElement('div');
+        actions.className = 'cb-actions';
+
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'cb-btn cb-copy';
+        copyBtn.type = 'button';
+        copyBtn.textContent = '复制';
+        copyBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          copyText(extractCode(figure), copyBtn);
+        });
+
+        var foldBtn = document.createElement('button');
+        foldBtn.className = 'cb-btn cb-fold';
+        foldBtn.type = 'button';
+        foldBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          setCollapsed(wrapper, !wrapper.classList.contains('cb-collapsed'));
+          syncGlobalBtn();
+        });
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(foldBtn);
+        header.appendChild(langSpan);
+        header.appendChild(actions);
+        wrapper.appendChild(header);
+        wrapper.appendChild(figure);
+
+        setCollapsed(wrapper, lineCount(figure) > FOLD_THRESHOLD);
+      });
+
+      if (body.querySelector('.cb-enhanced')) addGlobalToggle(body);
+    }
+
+    function copyText(text, btn) {
+      var restore = function () { btn.textContent = '复制'; };
+      var done = function () { btn.textContent = '已复制'; setTimeout(restore, 1500); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+      } else {
+        fallback(text, done);
+      }
+    }
+
+    function fallback(text, done) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    function init() { enhance(); }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    document.addEventListener('pjax:complete', init);
+  })();
+</script>
+
+<script>
+  (function () {
+    // 主题自带的 theme.mermaid 在 DOMContentLoaded 之后注入时不会自动 init（它依赖 mermaid
+    // 内部的 startOnLoad），所以这里保持 theme.mermaid.enable: false，自己显式渲染。
+    var MERMAID_SRC = 'https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.min.js';
+    var loading = false;
+
+    function render(nodes) {
+      var m = window.mermaid;
+      if (!m) return;
+      m.initialize({
+        startOnLoad: false,
+        theme: 'forest',
+        // 图标签里的 <br/> 换行需要 loose，strict 会被当作文本
+        securityLevel: 'loose',
+        flowchart: { curve: 'linear' }
+      });
+
+      // 源码从 data-graph 属性读，不要读 textContent：textContent 是可见文本，
+      // 在页面初始化阶段会被页面上遍历文本节点的脚本改写（实测 Q[" 变成 Q ["），
+      // 改写完就解析失败了。属性值不是文本节点，不受影响。
+      nodes.forEach(function (el, i) {
+        if (el.getAttribute('data-processed') || el.getAttribute('data-mm-tried')) return;
+        var code = el.getAttribute('data-graph') || el.textContent;
+        if (!code) return;
+        el.setAttribute('data-mm-tried', '1');
+        var id = 'mermaid-' + Date.now() + '-' + i;
+        var task = m.renderAsync
+          ? m.renderAsync(id, code)
+          : new Promise(function (resolve, reject) { m.render(id, code, resolve, reject); });
+        task.then(function (svg) {
+          el.innerHTML = svg;
+          el.setAttribute('data-processed', 'true');
+        }).catch(function () {
+          // 解析失败：保留源码文本，由 head.swig 的降级样式按等宽源码显示
+          el.removeAttribute('data-mm-tried');
+        });
+      });
+    }
+
+    function scan() {
+      var nodes = Array.prototype.slice.call(document.querySelectorAll('.post-body div.mermaid'));
+      if (!nodes.length) return;
+      if (window.mermaid) { render(nodes); return; }
+      if (loading) return;
+      loading = true;
+      var s = document.createElement('script');
+      s.src = MERMAID_SRC;
+      s.onload = function () { render(nodes); };
+      // 加载失败时不处理：未渲染的 div 由 head.swig 的样式降级成等宽源码显示
+      s.onerror = function () { loading = false; };
+      document.head.appendChild(s);
+    }
+
+    function init() { scan(); }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    document.addEventListener('pjax:complete', init);
+  })();
+</script>
+
+<script>
+  (function () {
+    // NexT 模板只给 .sidebar-nav-toc 加了 sidebar-nav-active，却没给对应面板加
+    // sidebar-panel-active，而 sidebar-nav.styl:33 的 .sidebar-panel { display: none }
+    // 是无条件的 —— 所以目录面板在任何宽度下初始都是隐藏的，必须点一次别的 tab
+    // 再点回来才出来。这里按当前激活 tab 的下标补齐（tab 与 panel 顺序一一对应）。
+    function activateDefaultPanel() {
+      var panels = document.querySelectorAll('.sidebar-panel');
+      if (!panels.length || document.querySelector('.sidebar-panel-active')) return;
+      var activeTab = document.querySelector('.sidebar-nav li.sidebar-nav-active');
+      var idx = activeTab ? Array.prototype.indexOf.call(activeTab.parentNode.children, activeTab) : 0;
+      if (!(idx >= 0) || idx >= panels.length) idx = 0;
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.toggle('sidebar-panel-active', i === idx);
+      }
+    }
+
+    // 目录条目被 CSS 截断后，被省略的部分只能靠原生 tooltip 看到；
+    // Hexo 的 TOC helper 不输出 title，这里补上（样式见 head.swig 的 .post-toc 段）。
+    function addTocTitles() {
+      var links = document.querySelectorAll('.post-toc .nav-link');
+      for (var i = 0; i < links.length; i++) {
+        var text = links[i].querySelector('.nav-text');
+        if (!text || links[i].hasAttribute('title')) continue;
+        links[i].setAttribute('title', text.textContent.trim());
+      }
+    }
+
+    // Pisces 方案没有移动端侧栏 JS（滑出逻辑只在 js/schemes/muse.js 里），
+    // 汉堡按钮的开合得自己接上，样式见 head.swig 的 .cb-sidebar-open 段。
+    function initSidebarToggle() {
+      var toggle = document.querySelector('.sidebar-toggle');
+      var sidebar = document.querySelector('.sidebar');
+      if (!toggle || !sidebar || toggle.dataset.cbBound) return;
+      toggle.dataset.cbBound = '1';
+
+      function isOpen() { return document.body.classList.contains('cb-sidebar-open'); }
+      function close() { document.body.classList.remove('cb-sidebar-open'); }
+      function open() {
+        activateDefaultPanel();
+        document.body.classList.add('cb-sidebar-open');
+      }
+
+      toggle.addEventListener('click', function () { isOpen() ? close() : open(); });
+
+      document.addEventListener('click', function (e) {
+        if (!isOpen() || toggle.contains(e.target)) return;
+        if (sidebar.contains(e.target)) {
+          // 手机上点了目录条目要收起抽屉，但不能同步收：链接面板一旦变成
+          // display:none，浏览器就不执行这次的 #锚点 跳转（实测 scrollY 和 hash 都不动）。
+          if (e.target.closest && e.target.closest('a[href^="#"]')) setTimeout(close, 0);
+          return;
+        }
+        close();
+      });
+
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+      window.addEventListener('resize', function () { if (window.innerWidth >= 992) close(); });
+    }
+
+    function init() { activateDefaultPanel(); addTocTitles(); initSidebarToggle(); }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    document.addEventListener('pjax:complete', init);
+  })();
+</script>
 
 </body>
 </html>
